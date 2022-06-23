@@ -17,12 +17,17 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
     # Runs a single command using the runners shell
-    - name: Check env
-      shell: pwsh
+    - name: Check env      
       run: pwd
+      
+    - name: Checkout branch
+      uses: actions/checkout@v3
+      
+    - name: Check status
+      run: git status
     
     - name: Download docfx
-      run: curl https://github.com/dotnet/docfx/releases/download/v2.59.2/docfx.zip
+      run: curl -LO https://github.com/dotnet/docfx/releases/download/v2.59.2/docfx.zip
       
     - name: View content
       run: dir      
