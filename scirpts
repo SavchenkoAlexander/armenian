@@ -1,0 +1,64 @@
+alter table [SupportCenterPaid].[adb1f2b6-85b4-40cd-a7bc-0a205a2ef088].[TicketFields]
+add ExternalSourceHeaderName nvarchar(256) null, ExternalSourceHeaderValue nvarchar(1024) null;
+
+alter table [SupportCenterPaid].[c1f0951c-3885-44cf-accb-1a390f34c342].[TicketFields]
+add ExternalSourceHeaderName nvarchar(256) null, ExternalSourceHeaderValue nvarchar(1024) null;
+
+alter table [SupportCenterPaid].[af65ad64-81f0-46b6-910f-c5dbc813c8d0].[TicketFields]
+add ExternalSourceHeaderName nvarchar(256) null, ExternalSourceHeaderValue nvarchar(1024) null;
+
+ALTER TABLE [SupportCenterPaid].[adb1f2b6-85b4-40cd-a7bc-0a205a2ef088].[Triggers] ADD DomainVersion int not null default 2
+GO
+ALTER TABLE [SupportCenterPaid].[af65ad64-81f0-46b6-910f-c5dbc813c8d0].[Triggers] ADD DomainVersion int not null default 2
+GO
+ALTER TABLE [SupportCenterPaid].[c1f0951c-3885-44cf-accb-1a390f34c342].[Triggers] ADD DomainVersion int not null default 2
+GO
+
+INSERT INTO [SupportCenterPaid].[adb1f2b6-85b4-40cd-a7bc-0a205a2ef088].[Triggers] ([Id], [Name], [Json], [Order], [Created], [Modified], [Error], [Active], [Description], [IsMacro], [DomainVersion])
+SELECT NEWID(), CONCAT([Name], '(old)'), [Json], [Order], [Created], [Modified], [Error], [Active], [Description], [IsMacro], 1 FROM [SupportCenterPaid].[adb1f2b6-85b4-40cd-a7bc-0a205a2ef088].[Triggers]
+GO
+INSERT INTO [SupportCenterPaid].[af65ad64-81f0-46b6-910f-c5dbc813c8d0].[Triggers] ([Id], [Name], [Json], [Order], [Created], [Modified], [Error], [Active], [Description], [IsMacro], [DomainVersion])
+SELECT NEWID(), CONCAT([Name], '(old)'), [Json], [Order], [Created], [Modified], [Error], [Active], [Description], [IsMacro], 1 FROM [SupportCenterPaid].[adb1f2b6-85b4-40cd-a7bc-0a205a2ef088].[Triggers]
+GO
+INSERT INTO [SupportCenterPaid].[c1f0951c-3885-44cf-accb-1a390f34c342].[Triggers] ([Id], [Name], [Json], [Order], [Created], [Modified], [Error], [Active], [Description], [IsMacro], [DomainVersion])
+SELECT NEWID(), CONCAT([Name], '(old)'), [Json], [Order], [Created], [Modified], [Error], [Active], [Description], [IsMacro], 1 FROM [SupportCenterPaid].[adb1f2b6-85b4-40cd-a7bc-0a205a2ef088].[Triggers]
+GO
+
+UPDATE [SupportCenterPaid].[adb1f2b6-85b4-40cd-a7bc-0a205a2ef088].[Triggers]
+SET [Json] = REPLACE(REPLACE([JSON], 'SupportCenter.Service.Domain', 'AnswerDesk.Service.Domain'), 'mscorlib', 'System.Private.CoreLib')
+WHERE [DomainVersion] = 2
+GO
+UPDATE [SupportCenterPaid].[af65ad64-81f0-46b6-910f-c5dbc813c8d0].[Triggers]
+SET [Json] = REPLACE(REPLACE([JSON], 'SupportCenter.Service.Domain', 'AnswerDesk.Service.Domain'), 'mscorlib', 'System.Private.CoreLib')
+WHERE [DomainVersion] = 2
+GO
+UPDATE [SupportCenterPaid].[c1f0951c-3885-44cf-accb-1a390f34c342].[Triggers]
+SET [Json] = REPLACE(REPLACE([JSON], 'SupportCenter.Service.Domain', 'AnswerDesk.Service.Domain'), 'mscorlib', 'System.Private.CoreLib')
+WHERE [DomainVersion] = 2
+GO
+
+
+
+CREATE TABLE [testing_ManagementCenterPaid].[dbo].[CompanySettings](
+	[Id] [uniqueidentifier] ROWGUIDCOL  NOT NULL,
+	[Name] [nvarchar](100) NULL,
+	[Value] [nvarchar](100) NULL,
+	[CompanyId] [uniqueidentifier] NULL,
+ CONSTRAINT [PK_CompanySettings] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+CREATE NONCLUSTERED INDEX [iCompanyId_CompanySettings] ON [testing_ManagementCenterPaid].[dbo].[CompanySettings]
+(
+	[CompanyId] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO
+ALTER TABLE [testing_ManagementCenterPaid].[dbo].[CompanySettings] WITH NOCHECK ADD CONSTRAINT [FK_CompanySettings_Companies] FOREIGN KEY([CompanyId])
+REFERENCES [testing_ManagementCenterPaid].[dbo].[Companies] ([Id])
+NOT FOR REPLICATION 
+GO
+ALTER TABLE [testing_ManagementCenterPaid].[dbo].[CompanySettings] CHECK CONSTRAINT [FK_CompanySettings_Companies]
+GO
+
