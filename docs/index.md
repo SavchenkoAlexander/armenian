@@ -1,6 +1,4 @@
-[Урок 5](lesson5.html)
-[Урок 6](lesson6.html)
-[Урок 7](lesson7.html)
+[Урок 5](lesson5.md)    [Урок 6](lesson6.md)    [Урок 7](lesson7.md)    [Урок 8](lesson8.md)
 
 
 |    1    |    2    |    3    |    4    |
